@@ -4,6 +4,8 @@ module.exports = router
 
 const employees = require("../data/employees");
 
+router.use(express.json())
+
 router.get("/", (req, res) => {
   res.json(employees);
 });
@@ -20,6 +22,16 @@ router.get("/:id", (req, res) => {
     res.json(employee);
   } else {
     res.status(404).send(`There is no employee with id ${id}.`);
+  }
+});
+
+router.post("/", (req, res) => {
+  const { id, name } = req.body;
+  if (id && name) {
+    employees.push({ id, name });
+    res.status(201).json(employees[employees.length - 1]);
+  } else {
+    res.status(400).send("New employee must have an id and a name");
   }
 });
 
